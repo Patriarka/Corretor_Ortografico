@@ -1,4 +1,5 @@
 #pragma once
+#define tamanho_alfabeto 26
 
 typedef enum ASCIITrie_ESTADO{
     ATE_LIVRE,
@@ -9,7 +10,7 @@ typedef struct ASCIITrie{
     int val;
     int tam;
     ASCIITrie_ESTADO estado;
-    struct ASCIITrie* filhos[256];
+    struct ASCIITrie* filhos[26];
 } ASCIITrie;
 
 ASCIITrie* AT_Criar();

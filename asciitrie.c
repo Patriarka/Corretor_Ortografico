@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <ctype.h>
 #include "asciitrie.h"
 
 ASCIITrie* AT_Buscar_R(ASCIITrie* T, unsigned char *chave, int n, int p){
@@ -29,7 +28,7 @@ ASCIITrie* AT_Criar(){
     noh->val = 0;
     noh->tam = 0;
 
-    for(i = 0; i < 256; i++)
+    for(i = 0; i < 26; i++)
         noh->filhos[i] = NULL;
 
     return noh;
@@ -46,7 +45,7 @@ void AT_Inserir_R(ASCIITrie **T, unsigned char *chave, int val, int n, int p){
         return;
     };
 
-    AT_Inserir_R(&(*T)->filhos[chave[p]], chave, val, n, p+1);  
+    AT_Inserir_R(&(*T)->filhos[chave[p]-97], chave, val, n, p+1);  
 };
 
 void AT_Inserir(ASCIITrie **T, unsigned char *chave, int val){
@@ -70,7 +69,7 @@ void AT_Remover_R(ASCIITrie **T, unsigned char *chave, int n, int p){
     if((*T)->estado == ATE_OCUPADO)
       return;
     
-    for(i = 0; i < 256; i++)
+    for(i = 0; i < 26; i++)
       if((*T)->filhos[i] != NULL)
         return;
         
@@ -90,9 +89,9 @@ static void AT_Imprimir_R(ASCIITrie *T, unsigned char c, int nivel){
     char e = (T->estado == 0) ? 'L': 'O';
     printf("(%c) %d (%c)\n", c, T->val, e);
 
-    for(int i = 0; i < 256; i++)
+    for(int i = 0; i < 26; i++)
         if(T->filhos[i] != NULL)
-            AT_Imprimir_R(T->filhos[i], i, nivel+1);
+            AT_Imprimir_R(T->filhos[i], i+97, nivel+1);
 
 }
 

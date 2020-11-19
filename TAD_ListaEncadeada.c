@@ -47,7 +47,7 @@ void lista_imprimir(Lista* l){
 
     printf("[");
     while(i < l->qtde){
-        printf("%d", aux->dado);
+        printf("%s", aux->dado);
         if(i < l->qtde - 1) printf(", ");
         aux = aux->prox;
         i++;
@@ -66,7 +66,7 @@ void lista_inserir_fim(Lista* l, Tipo elemento){
     l->ultimo = noInsere;
     l->qtde++;
 }
-
+/* 
 Tipo* lista_remover1(Lista* l, int posicao){
     if((posicao - 1) > l->qtde-1 || (posicao - 1) < 0 || l == NULL || l->qtde == 0) return false;
     posicao = posicao - 1;
@@ -96,7 +96,7 @@ Tipo* lista_remover1(Lista* l, int posicao){
 
     return removido;
 }
-
+ */
 No* getNo(Lista* l, int posicao){
 
     int i;
@@ -120,7 +120,7 @@ No* getNo(Lista* l, int posicao){
 
     return aux;
 }
-
+/* 
 Boolean lista_buscar(Lista* l, int posicao, int* endereco){
 
     No* aux = getNo(l, posicao);
@@ -128,7 +128,7 @@ Boolean lista_buscar(Lista* l, int posicao, int* endereco){
 
     return true;
 }
-
+ *//* 
 Boolean lista_remover_elemento(Lista* l, Tipo elemento){
     if(l == NULL) return false;
 
@@ -146,7 +146,7 @@ Boolean lista_remover_elemento(Lista* l, Tipo elemento){
     }
     return false;
 }
-
+ */
 Boolean lista_contem(Lista* l, Tipo elemento){
     if(l == NULL || l->qtde == 0) return false;
 
@@ -158,7 +158,7 @@ Boolean lista_contem(Lista* l, Tipo elemento){
     }
     return false;
 }
-
+/* 
 Boolean lista_remover2(Lista* l, int posicao, Tipo* endereco){
     if(l == NULL || l->qtde == 0 || endereco == NULL) return false;
 
@@ -186,7 +186,7 @@ Boolean lista_remover2(Lista* l, int posicao, Tipo* endereco){
 
     return true;
 }
-
+ */
 int lista_posicao(Lista* l, Tipo elemento){
     if(l == NULL) return -1;
     
@@ -206,7 +206,7 @@ int lista_tamanho(Lista* l){
     if(l == NULL) return -1;
     return l->qtde;
 }
-
+/* 
 void lista_destruir(Lista* l){
 
     Tipo* removidoFree;
@@ -215,4 +215,4 @@ void lista_destruir(Lista* l){
     free(l->primeiro);
     free(l->ultimo);
     free(l);
-}
+} */
