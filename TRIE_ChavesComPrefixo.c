@@ -4,55 +4,50 @@
 #include "asciitrie.h"
 #include "TAD_ListaEncadeada.h"
 
-void Inserir_Trie_Lista(ASCIITrie* Trie, char* prefixo, Lista* lista){
+void Inserir_Trie_Lista(ASCIITrie* Trie, unsigned char* prefixo, Lista* lista){
     
-    // printf("Trie %p prefixo: %s lista: %p\n", Trie, prefixo, lista);
+    printf("Trie %p prefixo: %s lista: %p\n", Trie, prefixo, lista);
     if(Trie == NULL){
-        printf("é nulo");
+        printf("é nulo\n");
         return;
     }
-    printf("não é nulo");
-    char* str;
+    printf("não é nulo\n");
 
-     /*
-     if(strlen(prefixo) >= sizeof(prefixo) / 2) {
-                printf("aq");
-                prefixo = (char*) realloc(prefixo, sizeof(prefixo) * 2);
-            }*/
+    char prefixoNovo[] = "";
 
-    for(char caractere = 0; caractere < 26; caractere++){
-        printf("qq");
-        if(Trie->filhos[caractere] != NULL){
-            // caractere[0] = (char)i;
-           
-            strcat(prefixo, str); 
-            printf("%s\n", prefixo);
-        
-        };
-    };
+    printf("tamanho do prefixo %ld\n", strlen(prefixo));
 
-
-   /*  char* caractere;
-    for(int i = 0; i < 26; i++){
-        if(Trie->filhos[i] != NULL){
-            caractere[0] = (char)i;
-            if(strlen(prefixo) >= sizeof(prefixo) / 2) 
-                prefixo = (char*) realloc(prefixo, sizeof(prefixo) * 2);
-            strncat(prefixo, caractere, 1);
-            printf("%s\n", prefixo);
-        }
+    for(int i=0; i< strlen(prefixo) + 1; i++){
+        prefixoNovo[i] = prefixo[i];
+        // printf("%c %c\n", prefixoNovo[i], prefixo[i]);
     }
- */
+    
+    printf("depois %s\n", prefixoNovo);
+    
+    /*
+        for(int i = 0; i < 26; i++){
+            if(Trie->filhos[i] != NULL){
+                caractere[0] = (char)i;
+                if(strlen(prefixo) >= sizeof(prefixo) / 2) 
+                    prefixo = (char*) realloc(prefixo, sizeof(prefixo) * 2);
+                
+                printf("%s\n", prefixo);
+            }
+        };
+    */
 }
 
 Lista* TRIE_ChavesComPrefixo(ASCIITrie * Trie, char* prefixo){
 
-    
     Lista* lista_chaves = lista_criar();
 
-    ASCIITrie* sufixo = AT_Buscar(Trie, prefixo);
-    
-    Inserir_Trie_Lista(Trie, prefixo, lista_chaves);
+    ASCIITrie* arvore_palavras = AT_Buscar(Trie, prefixo);
+
+    // AT_Imprimir(arvore_palavras);
+
+    Inserir_Trie_Lista(arvore_palavras, prefixo, lista_chaves);
+
+    printf("saiu da função inserir");
 
     //AT_Imprimir(sufixo);
     

@@ -39,11 +39,9 @@ int main(int argc, char** argv) {
 
 
     ASCIITrie* Trie = ConstruirDicionario("dicionario.txt");
-
+    
     Lista* nome_teste = TRIE_ChavesComPrefixo(Trie, "pao");
     
-    // printf("%s", nome_teste->primeiro->dado);
-
     // lista_imprimir(nome_teste);
 
     return 0;

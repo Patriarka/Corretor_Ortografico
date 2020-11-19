@@ -11,7 +11,7 @@ ASCIITrie* AT_Buscar_R(ASCIITrie* T, unsigned char *chave, int n, int p){
     if(p == n) 
         return T;
     
-    return AT_Buscar_R(T->filhos[chave[p]], chave, n, p+1); 
+    return AT_Buscar_R(T->filhos[chave[p]-97], chave, n, p+1); 
 };
 
 ASCIITrie* AT_Buscar(ASCIITrie* T, unsigned char *chave){
