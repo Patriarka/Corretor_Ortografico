@@ -2,8 +2,9 @@
 #include <string.h>
 #include <ctype.h>
 #include "asciitrie.h"
-#include "TRIE_ChavesComPrefixo.h"
 #include "TAD_ListaEncadeada.h"
+#include "TRIE_ChavesComPrefixo.h"
+#include "TRIE_ChavesQueCasam.h"
 
 char* Converter_Minusculo(char* palavra){
 
@@ -37,10 +38,11 @@ ASCIITrie* ConstruirDicionario(char* arq_lista_palavras){
 
 int main(int argc, char** argv) {    
 
-
     ASCIITrie* Trie = ConstruirDicionario("dicionario.txt");
     
-    Lista* nome_teste = TRIE_ChavesComPrefixo(Trie, "pao");
+    Lista* nome_teste = TRIE_ChavesComPrefixo(Trie, "chamado");
+
+    // Lista* nome_teste = TRIE_ChavesQueCasam(Trie, "chamado", 3);
     
     // lista_imprimir(nome_teste);
 

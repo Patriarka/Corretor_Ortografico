@@ -1,44 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "TAD_ListaEncadeada.h"
 
 Lista* lista_criar(){
-  Lista* novaL = (Lista*) malloc(sizeof(Lista));
-  novaL->qtde = 0;
-  return novaL;
-}
 
-void lista_inserir(Lista* l, Tipo elemento, int posicao){
-    posicao -= 1;
-    if(posicao >= l->qtde + 1 || posicao < 0 || l == NULL) return;
+    Lista* nova_lista = (Lista*) malloc(sizeof(Lista));
 
-    No* noInsere = (No*) malloc(sizeof(No));
-    noInsere->dado = elemento;
-
-    if(l->qtde == 0){
-        l->primeiro = noInsere;
-        l->ultimo = noInsere;
-        noInsere->prox = NULL;
-        noInsere->ant = NULL;
-    }else{
-        if(posicao == l->qtde){
-            noInsere->ant = l->ultimo;
-            l->ultimo->prox = noInsere;
-            noInsere->prox = NULL;
-            l->ultimo = noInsere;
-        }else if(posicao == 0){
-            noInsere->ant = NULL;
-            noInsere->prox = l->primeiro;
-            l->primeiro = noInsere;
-        }else{
-            No* aux = getNo(l, posicao);
-            noInsere->ant = aux->ant->prox = noInsere;
-            noInsere->prox = aux;
-            aux->ant = noInsere;
-        }
-      }
-      l->qtde++;
-}
+    nova_lista->primeiro = nova_lista->ultimo = NULL;
+    nova_lista->qtde = 0;
+    
+    return nova_lista;
+};
 
 void lista_imprimir(Lista* l){
 
@@ -55,17 +28,84 @@ void lista_imprimir(Lista* l){
     printf("]\n\n");
 }
 
-void lista_inserir_fim(Lista* l, Tipo elemento){
-    if(l == NULL) return;
+void lista_inserir(Lista* l, Tipo elemento, int posicao){
+    posicao -= 1;
+    if(posicao >= l->qtde + 1 || posicao < 0 || l == NULL) return;
 
-    No* noInsere = (No*) malloc(sizeof(No));
+    No* noInsere = (No*) malloc(sizeof(No) + 1);
     noInsere->dado = elemento;
-    noInsere->ant = l->ultimo;
-    l->ultimo->prox = noInsere;
-    noInsere->prox = NULL;
-    l->ultimo = noInsere;
+    strcpy(noInsere->dado, elemento);
+    printf("strcpy %s\n", noInsere->dado);
+
+    for(int i = 0; i < strlen(elemento); i++){
+        noInsere->dado[i] = elemento[i];  
+    } 
+
+    printf("nOiNSERE %p, elemento %p\n", noInsere, elemento);
+
+    if(l->qtde == 0){
+        l->primeiro = noInsere;
+        l->ultimo = noInsere;
+        noInsere->prox = NULL;
+        noInsere->ant = NULL;
+    }else{
+        if(posicao == l->qtde){
+            noInsere->ant = l->ultimo;              // anterior do ultimo recebe o penultimo
+            l->ultimo->prox = noInsere;             // prox penultimo recebe o ultimo
+            noInsere->prox = NULL;                  // prox ultimo recebe null
+            l->ultimo = noInsere;                   // ultimo lista recebe o novo
+        }else if(posicao == 0){
+            noInsere->ant = NULL;
+            noInsere->prox = l->primeiro;
+            l->primeiro = noInsere;
+        }else{
+            No* aux = getNo(l, posicao);
+            noInsere->ant = aux->ant->prox = noInsere;
+            noInsere->prox = aux;
+            aux->ant = noInsere;
+        }
+    }
     l->qtde++;
 }
+
+
+
+/* void lista_inserir_fim(Lista* lista, Tipo elemento){
+
+    if(lista == NULL) return;
+
+    No* no = (No*) malloc(sizeof(No));
+
+    no->dado = elemento;
+    no->ant = lista->ultimo;
+
+    lista->ultimo->prox = no;
+    no->prox = NULL;
+    lista->ultimo = no;
+    lista->qtde++;
+
+} */
+
+void lista_inserir_fim(Lista* l, Tipo elemento){
+
+  No* novo = (No*) malloc(sizeof(No));
+  novo->dado = elemento;
+
+  if(l->qtde == 0){
+    l->primeiro = novo;
+    l->ultimo = novo;
+  }
+  else{
+    novo->ant = l->ultimo;
+    l->ultimo->prox = novo;
+    l->ultimo = novo;
+  }
+
+  printf("%s\n", novo->dado);
+
+  l->qtde++;
+}
+
 /* 
 Tipo* lista_remover1(Lista* l, int posicao){
     if((posicao - 1) > l->qtde-1 || (posicao - 1) < 0 || l == NULL || l->qtde == 0) return false;
