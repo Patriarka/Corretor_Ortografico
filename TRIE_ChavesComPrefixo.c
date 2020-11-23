@@ -27,7 +27,6 @@ void Inserir_Trie_Lista_R(ASCIITrie *Trie, char *prefixo, Lista *lista)
             novo_prefixo[j] = (char) i+97;
             novo_prefixo[j+1] = '\0';
 
-
             Inserir_Trie_Lista_R(Trie->filhos[i], novo_prefixo, lista);
         };
     };

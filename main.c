@@ -40,9 +40,9 @@ int main(int argc, char** argv) {
 
     ASCIITrie* Trie = ConstruirDicionario("dicionario.txt");
     
-    Lista* nome_teste = TRIE_ChavesComPrefixo(Trie, "chamado");
+    // Lista* nome_teste = TRIE_ChavesComPrefixo(Trie, "chamado");
 
-    // Lista* nome_teste = TRIE_ChavesQueCasam(Trie, "chamado", 1);
+    Lista* nome_teste = TRIE_ChavesQueCasam(Trie, "chamado", 3);
     
     // lista_imprimir(nome_teste);
 

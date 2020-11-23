@@ -6,3 +6,4 @@
 Lista* TRIE_ChavesQueCasam(ASCIITrie* Trie, char* padrao, int n_extras);
 
 
+
