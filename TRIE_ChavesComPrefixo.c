@@ -4,32 +4,30 @@
 #include "asciitrie.h"
 #include "TAD_ListaEncadeada.h"
 
-void Inserir_Trie_Lista_R(ASCIITrie *Trie, char *prefixo, Lista *lista)
+void Inserir_Trie_Lista_R(ASCIITrie *Trie, char *prefixo, Lista* lista)
 {
-
     if (Trie == NULL)
         return;
 
-    if (Trie->estado != ATE_LIVRE){
-        lista_inserir_fim(lista, prefixo);      
-    }
+    if (Trie->estado != ATE_LIVRE)
+        lista_inserir_fim(lista, prefixo);
 
     for (int i = 0; i < 26; i++)
     {
         if (Trie->filhos[i] != NULL)
         {
-            char* novo_prefixo = malloc(strlen(prefixo) * sizeof(char)+1);
+            char* novo_prefixo = (char*) malloc((strlen(prefixo) + 2) * sizeof(char));
             int j;
 
-            for(j = 0; j < strlen(prefixo); j++)
-                novo_prefixo[j] = prefixo[j];
+            strcpy(novo_prefixo, prefixo);
 
-            novo_prefixo[j] = (char) i+97;
-            novo_prefixo[j+1] = '\0';
+            novo_prefixo[strlen(prefixo)] = (char)i+97;
+            novo_prefixo[strlen(prefixo)+1] = '\0';
 
             Inserir_Trie_Lista_R(Trie->filhos[i], novo_prefixo, lista);
-        };
-    };
+            free(novo_prefixo);
+        }
+    }
 };
 
 Lista *TRIE_ChavesComPrefixo(ASCIITrie *Trie, char *prefixo)
@@ -47,3 +45,4 @@ Lista *TRIE_ChavesComPrefixo(ASCIITrie *Trie, char *prefixo)
 
     return lista_chaves;
 }
+

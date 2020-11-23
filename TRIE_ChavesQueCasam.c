@@ -6,7 +6,6 @@
 
 void TRIE_ChavesQueCasam_R(ASCIITrie* Trie, char* padrao, int n_extras, Lista* lista){
     
-
     if (Trie->estado != ATE_LIVRE){
         lista_inserir_fim(lista, padrao);      
     }
@@ -22,11 +21,10 @@ void TRIE_ChavesQueCasam_R(ASCIITrie* Trie, char* padrao, int n_extras, Lista* l
                 int j;
                 char* novo_padrao = malloc((strlen(padrao)) * sizeof(char));
 
-                for(j = 0; j < strlen(padrao); j++)
-                    novo_padrao[j] = padrao[j];
+                strcpy(novo_padrao, padrao);
 
-                novo_padrao[j] = (char) i+97;
-                novo_padrao[j+1] = '\0';
+                novo_padrao[strlen(padrao)] = (char)i+97;
+                novo_padrao[strlen(padrao)+1] = '\0';
                 
                 TRIE_ChavesQueCasam_R(Trie->filhos[i], novo_padrao, n_extras-1, lista);
             } else return;
@@ -47,5 +45,25 @@ Lista* TRIE_ChavesQueCasam(ASCIITrie* Trie, char* padrao, int n_extras){
     return lista_chaves;
 }
 
+/* 
 
+char* TRIE_ChaveMaiorPrefixoDe(ASCIITrie* Trie, char* str){
+    int max = -1;
+
+    printf("Tamanho de str: %ld\n", strlen(str));
+
+    for(int i = 0; Trie != NULL; i++){
+        if(Trie->filhos[i] != NULL) max = i;
+        if(i == strlen(str)) break;
+        Trie = Trie->filhos[i];
+    }
+
+    printf("%d\n", max);
+
+    char str2[max];
+    if(max == -1) return NULL;
+    else return strncat(str2, str, max);
+}
+
+ */
           

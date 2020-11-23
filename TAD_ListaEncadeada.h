@@ -9,11 +9,11 @@ typedef struct no{
     struct no* ant;
 }No;
 
-typedef struct{
+typedef struct Lista{
     No* primeiro;
     No* ultimo;
     int qtde;
-}Lista;
+} Lista;
 
 Lista* lista_criar();
 No* getNo(Lista* l, int posicao);

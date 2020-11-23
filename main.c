@@ -6,7 +6,7 @@
 #include "TRIE_ChavesComPrefixo.h"
 #include "TRIE_ChavesQueCasam.h"
 
-char* Converter_Minusculo(char* palavra){
+char* Converter_Minusculo(unsigned char* palavra){
 
     for(int i = 0; i < strlen(palavra); i++){
         palavra[i] = tolower(palavra[i]);
@@ -15,7 +15,7 @@ char* Converter_Minusculo(char* palavra){
     return palavra;
 }
 
-ASCIITrie* ConstruirDicionario(char* arq_lista_palavras){
+ASCIITrie* Construir_Dicionario(unsigned char* arq_lista_palavras){
 
     ASCIITrie* Trie = NULL;  
 
@@ -34,16 +34,59 @@ ASCIITrie* ConstruirDicionario(char* arq_lista_palavras){
     }
 
     return Trie;
-};
+}
 
-int main(int argc, char** argv) {    
+char* Ler_Texto(unsigned char* nome_arquivo_entrada){
 
-    ASCIITrie* Trie = ConstruirDicionario("dicionario.txt");
+    FILE* arquivo_entrada = fopen(nome_arquivo_entrada, "r");
+
+    if(arquivo_entrada == NULL){ 
+       printf ("Erro ao abrir o arquivo!\n");
+       return NULL;
+    } 
+
+    char* texto;
+
+    while(!feof(arquivo_entrada))
+        fscanf (arquivo_entrada, "%s", texto);
+
+    return texto;
+}
+
+void Corrigir_Ortografia(ASCIITrie* Trie, unsigned char* texto){
+
+    ASCIITrie* Trie_buscada = AT_Buscar(Trie, texto);
+
+    AT_Imprimir(Trie_buscada);
+
+    // receber o conteúdo nessa variavel
+
+    // Fazer isso para todas as palavras contidas no texto
+    //     Se a palavra estiver no dicionario 
+    //     Se a palavra não estiver no dicionario
+    //         Sugerir outras palavras a partir das regras abaixo
+
+    // printf("palavra que não está no dicionário: %s\n", );
+    // printf("sugestões: ");
+
+}
+
+int main(int argc, char** argv){   
+
+    // char* nome_arquivo = argv[1];   
+ 
+    // char* texto = Ler_Texto(nome_arquivo);    
+ 
+    ASCIITrie* Trie = Construir_Dicionario("dicionario.txt");   
+ 
+    // Corrigir_Ortografia(Trie, texto); 
+ 
+    // Lista* nome_teste = TRIE_ChavesComPrefixo(Trie, "chamado"); 
+
+    // Lista* nome_teste = TRIE_ChavesQueCasam(Trie, "chamado", 1);
     
-    // Lista* nome_teste = TRIE_ChavesComPrefixo(Trie, "chamado");
+    printf("%s\n", TRIE_ChaveMaiorPrefixoDe(Trie, "barcelonada"));
 
-    Lista* nome_teste = TRIE_ChavesQueCasam(Trie, "chamado", 3);
-    
     // lista_imprimir(nome_teste);
 
     return 0;

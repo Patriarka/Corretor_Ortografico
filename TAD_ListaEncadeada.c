@@ -60,8 +60,6 @@ void lista_inserir(Lista* l, Tipo elemento, int posicao){
     l->qtde++;
 }
 
-
-
 /* void lista_inserir_fim(Lista* lista, Tipo elemento){
 
     if(lista == NULL) return;
@@ -81,7 +79,9 @@ void lista_inserir(Lista* l, Tipo elemento, int posicao){
 void lista_inserir_fim(Lista* l, Tipo elemento){
 
   No* novo = (No*) malloc(sizeof(No));
-  novo->dado = elemento;
+  
+    novo->dado = (char*) malloc((strlen(elemento)+1)* sizeof(char));
+    strcpy(novo->dado, elemento);
 
   if(l->qtde == 0){
     l->primeiro = novo;
