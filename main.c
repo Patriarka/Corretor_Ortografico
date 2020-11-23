@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
     
     Lista* nome_teste = TRIE_ChavesComPrefixo(Trie, "chamado");
 
-    // Lista* nome_teste = TRIE_ChavesQueCasam(Trie, "chamado", 3);
+    // Lista* nome_teste = TRIE_ChavesQueCasam(Trie, "chamado", 1);
     
     // lista_imprimir(nome_teste);
 

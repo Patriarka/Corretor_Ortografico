@@ -4,27 +4,31 @@
 #include "asciitrie.h"
 #include "TAD_ListaEncadeada.h"
 
-void Inserir_Trie_Lista_R(ASCIITrie *Trie, char *prefixo, int tam_deslocamento, Lista *lista)
+void Inserir_Trie_Lista_R(ASCIITrie *Trie, char *prefixo, Lista *lista)
 {
 
     if (Trie == NULL)
         return;
 
-    if (Trie->estado != ATE_LIVRE)
-        lista_inserir_fim(lista, prefixo);
+    if (Trie->estado != ATE_LIVRE){
+        lista_inserir_fim(lista, prefixo);      
+    }
 
     for (int i = 0; i < 26; i++)
     {
         if (Trie->filhos[i] != NULL)
         {
-
-            char* novo_prefixo = malloc(1);
+            char* novo_prefixo = malloc(strlen(prefixo) * sizeof(char)+1);
             int j;
 
-            novo_prefixo[j] = (char)i + 97;
-            novo_prefixo[j + 1] = '\0';
+            for(j = 0; j < strlen(prefixo); j++)
+                novo_prefixo[j] = prefixo[j];
 
-            Inserir_Trie_Lista_R(Trie->filhos[i], novo_prefixo, tam_deslocamento + 1, lista);
+            novo_prefixo[j] = (char) i+97;
+            novo_prefixo[j+1] = '\0';
+
+
+            Inserir_Trie_Lista_R(Trie->filhos[i], novo_prefixo, lista);
         };
     };
 };
@@ -38,7 +42,7 @@ Lista *TRIE_ChavesComPrefixo(ASCIITrie *Trie, char *prefixo)
 
     AT_Imprimir(arvore_palavras);
 
-    Inserir_Trie_Lista_R(arvore_palavras, prefixo, 0, lista_chaves);
+    Inserir_Trie_Lista_R(arvore_palavras, prefixo, lista_chaves);
 
     lista_imprimir(lista_chaves);
 

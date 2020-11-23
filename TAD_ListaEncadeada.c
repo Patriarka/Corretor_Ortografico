@@ -34,14 +34,6 @@ void lista_inserir(Lista* l, Tipo elemento, int posicao){
 
     No* noInsere = (No*) malloc(sizeof(No) + 1);
     noInsere->dado = elemento;
-    strcpy(noInsere->dado, elemento);
-    printf("strcpy %s\n", noInsere->dado);
-
-    for(int i = 0; i < strlen(elemento); i++){
-        noInsere->dado[i] = elemento[i];  
-    } 
-
-    printf("nOiNSERE %p, elemento %p\n", noInsere, elemento);
 
     if(l->qtde == 0){
         l->primeiro = noInsere;
