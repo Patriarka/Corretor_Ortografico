@@ -3,55 +3,69 @@
 #include <string.h>
 #include "TAD_ListaEncadeada.h"
 
-Lista* lista_criar(){
+Lista *lista_criar()
+{
 
-    Lista* nova_lista = (Lista*) malloc(sizeof(Lista));
+    Lista *nova_lista = (Lista *)malloc(sizeof(Lista));
 
     nova_lista->primeiro = nova_lista->ultimo = NULL;
     nova_lista->qtde = 0;
-    
+
     return nova_lista;
 };
 
-void lista_imprimir(Lista* l){
+void lista_imprimir(Lista *l)
+{
 
-    int i=0;
-    No* aux = l->primeiro;
+    int i = 0;
+    No *aux = l->primeiro;
 
     printf("[");
-    while(i < l->qtde){
+    while (i < l->qtde)
+    {
         printf("%s", aux->dado);
-        if(i < l->qtde - 1) printf(", ");
+        if (i < l->qtde - 1)
+            printf(", ");
         aux = aux->prox;
         i++;
     }
     printf("]\n\n");
 }
 
-void lista_inserir(Lista* l, Tipo elemento, int posicao){
+void lista_inserir(Lista *l, Tipo elemento, int posicao)
+{
     posicao -= 1;
-    if(posicao >= l->qtde + 1 || posicao < 0 || l == NULL) return;
+    if (posicao >= l->qtde + 1 || posicao < 0 || l == NULL)
+        return;
 
-    No* noInsere = (No*) malloc(sizeof(No) + 1);
+    No *noInsere = (No *)malloc(sizeof(No) + 1);
     noInsere->dado = elemento;
 
-    if(l->qtde == 0){
+    if (l->qtde == 0)
+    {
         l->primeiro = noInsere;
         l->ultimo = noInsere;
         noInsere->prox = NULL;
         noInsere->ant = NULL;
-    }else{
-        if(posicao == l->qtde){
-            noInsere->ant = l->ultimo;              // anterior do ultimo recebe o penultimo
-            l->ultimo->prox = noInsere;             // prox penultimo recebe o ultimo
-            noInsere->prox = NULL;                  // prox ultimo recebe null
-            l->ultimo = noInsere;                   // ultimo lista recebe o novo
-        }else if(posicao == 0){
+    }
+    else
+    {
+        if (posicao == l->qtde)
+        {
+            noInsere->ant = l->ultimo;  // anterior do ultimo recebe o penultimo
+            l->ultimo->prox = noInsere; // prox penultimo recebe o ultimo
+            noInsere->prox = NULL;      // prox ultimo recebe null
+            l->ultimo = noInsere;       // ultimo lista recebe o novo
+        }
+        else if (posicao == 0)
+        {
             noInsere->ant = NULL;
             noInsere->prox = l->primeiro;
             l->primeiro = noInsere;
-        }else{
-            No* aux = getNo(l, posicao);
+        }
+        else
+        {
+            No *aux = getNo(l, posicao);
             noInsere->ant = aux->ant->prox = noInsere;
             noInsere->prox = aux;
             aux->ant = noInsere;
@@ -60,7 +74,8 @@ void lista_inserir(Lista* l, Tipo elemento, int posicao){
     l->qtde++;
 }
 
-/* void lista_inserir_fim(Lista* lista, Tipo elemento){
+/* 
+void lista_inserir_fim(Lista* lista, Tipo elemento){
 
     if(lista == NULL) return;
 
@@ -74,28 +89,31 @@ void lista_inserir(Lista* l, Tipo elemento, int posicao){
     lista->ultimo = no;
     lista->qtde++;
 
-} */
+} 
+*/
 
-void lista_inserir_fim(Lista* l, Tipo elemento){
+void lista_inserir_fim(Lista *l, Tipo elemento)
+{
 
-  No* novo = (No*) malloc(sizeof(No));
-  
-    novo->dado = (char*) malloc((strlen(elemento)+1)* sizeof(char));
+    No *novo = (No *)malloc(sizeof(No));
+
+    novo->dado = (char *)malloc((strlen(elemento) + 1));
+
     strcpy(novo->dado, elemento);
 
-  if(l->qtde == 0){
-    l->primeiro = novo;
-    l->ultimo = novo;
-  }
-  else{
-    novo->ant = l->ultimo;
-    l->ultimo->prox = novo;
-    l->ultimo = novo;
-  }
+    if (l->qtde == 0)
+    {
+        l->primeiro = novo;
+        l->ultimo = novo;
+    }
+    else
+    {
+        novo->ant = l->ultimo;
+        l->ultimo->prox = novo;
+        l->ultimo = novo;
+    }
 
-  printf("%s\n", novo->dado);
-
-  l->qtde++;
+    l->qtde++;
 }
 
 /* 
@@ -129,22 +147,28 @@ Tipo* lista_remover1(Lista* l, int posicao){
     return removido;
 }
  */
-No* getNo(Lista* l, int posicao){
+No *getNo(Lista *l, int posicao)
+{
 
     int i;
-    No* aux;
+    No *aux;
 
-    if(posicao <= l->qtde/2){
-        i=0;
+    if (posicao <= l->qtde / 2)
+    {
+        i = 0;
         aux = l->primeiro;
-        while(i != posicao){
+        while (i != posicao)
+        {
             aux = aux->prox;
             i++;
         }
-    }else{
+    }
+    else
+    {
         i = l->qtde;
         aux = l->ultimo;
-        while(i != posicao){
+        while (i != posicao)
+        {
             aux = aux->prox;
             i--;
         }
@@ -160,7 +184,8 @@ Boolean lista_buscar(Lista* l, int posicao, int* endereco){
 
     return true;
 }
- *//* 
+ */
+/* 
 Boolean lista_remover_elemento(Lista* l, Tipo elemento){
     if(l == NULL) return false;
 
@@ -179,13 +204,17 @@ Boolean lista_remover_elemento(Lista* l, Tipo elemento){
     return false;
 }
  */
-Boolean lista_contem(Lista* l, Tipo elemento){
-    if(l == NULL || l->qtde == 0) return false;
+Boolean lista_contem(Lista *l, Tipo elemento)
+{
+    if (l == NULL || l->qtde == 0)
+        return false;
 
-    No* aux = l->primeiro;
+    No *aux = l->primeiro;
 
-    while(aux != NULL){
-        if(aux->dado == elemento) return true;
+    while (aux != NULL)
+    {
+        if (aux->dado == elemento)
+            return true;
         aux = aux->prox;
     }
     return false;
@@ -219,14 +248,18 @@ Boolean lista_remover2(Lista* l, int posicao, Tipo* endereco){
     return true;
 }
  */
-int lista_posicao(Lista* l, Tipo elemento){
-    if(l == NULL) return -1;
-    
-    int i = 1;
-    No* aux = l->primeiro;
+int lista_posicao(Lista *l, Tipo elemento)
+{
+    if (l == NULL)
+        return -1;
 
-    while(aux != NULL){
-        if(aux->dado == elemento) return i;
+    int i = 1;
+    No *aux = l->primeiro;
+
+    while (aux != NULL)
+    {
+        if (aux->dado == elemento)
+            return i;
         i++;
         aux = aux->prox;
     }
@@ -234,8 +267,10 @@ int lista_posicao(Lista* l, Tipo elemento){
     return -1;
 }
 
-int lista_tamanho(Lista* l){
-    if(l == NULL) return -1;
+int lista_tamanho(Lista *l)
+{
+    if (l == NULL)
+        return -1;
     return l->qtde;
 }
 /* 

@@ -7,7 +7,7 @@ typedef struct no{
     Tipo dado;
     struct no* prox;
     struct no* ant;
-}No;
+} No;
 
 typedef struct Lista{
     No* primeiro;

@@ -1,5 +1,5 @@
 #pragma once
-#define tamanho_alfabeto 26
+// #define tamanho_alfabeto 26
 
 typedef enum ASCIITrie_ESTADO{
     ATE_LIVRE,

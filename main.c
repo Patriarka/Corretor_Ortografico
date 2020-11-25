@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include "asciitrie.h"
@@ -21,7 +22,7 @@ ASCIITrie* Construir_Dicionario(unsigned char* arq_lista_palavras){
 
     FILE* arquivo_dicionario = fopen(arq_lista_palavras, "r");
     
-    char* palavra_auxiliar;
+    char* palavra_auxiliar = (char*) malloc(sizeof(char));
     
     int i = 0;
 
@@ -68,8 +69,7 @@ void Corrigir_Ortografia(ASCIITrie* Trie, unsigned char* texto){
 
     // printf("palavra que não está no dicionário: %s\n", );
     // printf("sugestões: ");
-
-}
+};
 
 int main(int argc, char** argv){   
 
@@ -84,11 +84,10 @@ int main(int argc, char** argv){
     // Lista* nome_teste = TRIE_ChavesComPrefixo(Trie, "chamado"); 
 
     // Lista* nome_teste = TRIE_ChavesQueCasam(Trie, "chamado", 1);
-    
-    printf("%s\n", TRIE_ChaveMaiorPrefixoDe(Trie, "barcelonada"));
+
+    printf("%s\n", TRIE_ChaveMaiorPrefixoDe(Trie, "chamado"));
 
     // lista_imprimir(nome_teste);
 
     return 0;
-}
-
+};
