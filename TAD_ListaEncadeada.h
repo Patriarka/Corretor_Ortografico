@@ -19,7 +19,7 @@ Lista* lista_criar();
 No* getNo(Lista* l, int posicao);
 void lista_inserir(Lista* l, Tipo elemento, int posicao);
 void lista_imprimir(Lista* l);
-void lista_inserir_fim(Lista* l, Tipo elemento);
+void lista_inserir_fim(Lista *l, Tipo elemento, int qtde);
 Tipo* lista_remover1(Lista* l, int posicao);
 Boolean lista_buscar(Lista* l, int posicao, int* endereco);
 // Boolean lista_remover2(Lista* l, int posicao, int* endereco);
