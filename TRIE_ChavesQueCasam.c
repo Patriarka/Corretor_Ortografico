@@ -6,14 +6,15 @@
 #include "TAD_ListaEncadeada.h"
 #include "TRIE_ChavesQueCasam.h"
 
-void TRIE_ChavesQueCasam_R(ASCIITrie *Trie, char *padrao, int tam_padrao_ini, int flag, int n_extras, Lista *lista)
+/* void TRIE_ChavesQueCasam_R(ASCIITrie *Trie, char *padrao, int tam_padrao_ini, int flag, int n_extras, Lista *lista)
 {
-    // Verificar se precisamos apagar os com n_extras a menos
-    if (Trie->estado != ATE_LIVRE){
-        if(flag == 1 && strlen(padrao) == tam_padrao_ini){
+    if (Trie->estado != ATE_LIVRE)
+    {
+        if (flag == 1 && strlen(padrao) == tam_padrao_ini)
+        {
             lista_inserir_fim(lista, padrao);
         }
-        else if(flag == 0)
+        else if (flag == 0)
             lista_inserir_fim(lista, padrao);
     }
 
@@ -42,57 +43,49 @@ void TRIE_ChavesQueCasam_R(ASCIITrie *Trie, char *padrao, int tam_padrao_ini, in
         }
     }
 }
-
-Lista *TRIE_ChavesQueCasam(ASCIITrie *Trie, char *padrao, int flag, int n_extras)
+ */
+/* Lista *TRIE_ChavesQueCasam(ASCIITrie *Trie, char *padrao, int flag, int n_extras)
 {
 
     Lista *lista_chaves = lista_criar();
 
     ASCIITrie *arvore_palavras = AT_Buscar(Trie, padrao);
 
-    TRIE_ChavesQueCasam_R(arvore_palavras, padrao, strlen(padrao)+n_extras, flag, n_extras, lista_chaves);
+    char* novo_padrao = (char*) malloc(strlen(padrao) + n_extras * sizeof(char));
 
-    lista_imprimir(lista_chaves);
+    TRIE_ChavesQueCasam_R(arvore_palavras, padrao, novo_padrao, flag, n_extras, lista_chaves);
+
+    // lista_imprimir(lista_chaves);
 
     return lista_chaves;
 };
+ */
+static void TRIE_ChaveMaiorPrefixoDe_Aux(ASCIITrie *Trie, char *nova_str, char *str, Lista *lista, int pos)
+{
+    if (Trie == NULL)
+        return;
 
-No* maior_string_lista(Lista* lista_chaves){
+    if (Trie->estado == ATE_OCUPADO)
+        lista_inserir_fim(lista, nova_str, pos);
 
-    No *maior_elemento = lista_chaves->primeiro;
+    nova_str[pos] = str[pos];
+    nova_str[pos+1] = '\0';
 
-    for (int i = 0; i < lista_chaves->qtde; i++)
-        if (strlen(maior_elemento->dado) < strlen(maior_elemento->prox->dado))
-            maior_elemento = maior_elemento->prox;
+    TRIE_ChaveMaiorPrefixoDe_Aux(Trie->filhos[str[pos]-97], nova_str, str, lista, pos + 1);
+};
 
-    return maior_elemento;
-}
+char *TRIE_ChaveMaiorPrefixoDe(ASCIITrie *Trie, char *str)
+{
 
-static char* TRIE_ChaveMaiorPrefixoDe_Aux(ASCIITrie *Trie, char* nova_str, char *str, Lista* lista, int p){
+    Lista *lista = lista_criar();
 
-    if(Trie == NULL) return NULL;
-   
-    if(Trie->estado == ATE_OCUPADO) 
-        lista_inserir_fim(lista, nova_str);
+    char* nova_str = (char*) malloc(strlen(str)+1 * sizeof(char));
 
-    char* nova_str2 = (char*) malloc(p+1 * sizeof(char));
-    strncpy(nova_str2, str, p);
+    TRIE_ChaveMaiorPrefixoDe_Aux(Trie, nova_str, str, lista, 0);
 
-    nova_str2[strlen(nova_str2)] = str[p];
-    
-    nova_str2[strlen(nova_str2) + 1] = '\0'; 
-    TRIE_ChaveMaiorPrefixoDe_Aux(Trie->filhos[str[p]-97], nova_str2, str, lista, p+1);
+    free(nova_str);
 
-    if(lista->qtde == 0) return "";
-
-    free(nova_str2);
+    if (lista->qtde == 0) return "";
 
     return lista->ultimo->dado;
-}; 
-
-char* TRIE_ChaveMaiorPrefixoDe(ASCIITrie* Trie, char* str){
-    Lista* lista = lista_criar();
-    return TRIE_ChaveMaiorPrefixoDe_Aux(Trie, "" , str, lista, 0);
-}
-
-
+};
