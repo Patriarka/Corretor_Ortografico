@@ -5,18 +5,16 @@
 
 ASCIITrie* AT_Buscar_R(ASCIITrie* T, unsigned char *chave, int n, int p){
 
-    if(T == NULL)
+    if(T == NULL) 
         return NULL;
 
     if(p == n) 
         return T;
-
+    
     return AT_Buscar_R(T->filhos[chave[p]-97], chave, n, p+1); 
 };
 
 ASCIITrie* AT_Buscar(ASCIITrie* T, unsigned char *chave){
-    // printf("%s", chave);
-    // printf("%p", &chave);
     return AT_Buscar_R(T, chave, strlen(chave), 0);
 };
 

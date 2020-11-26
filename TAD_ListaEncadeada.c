@@ -20,6 +20,7 @@ void lista_imprimir(Lista *l)
     int i = 0;
     No *aux = l->primeiro;
 
+    printf("[");
     while (i < l->qtde)
     {
         printf("%s", aux->dado);
@@ -28,7 +29,7 @@ void lista_imprimir(Lista *l)
         aux = aux->prox;
         i++;
     }
-    printf("\n");
+    printf("]\n\n");
 }
 
 void lista_inserir(Lista *l, Tipo elemento, int posicao)
@@ -91,14 +92,14 @@ void lista_inserir_fim(Lista* lista, Tipo elemento){
 } 
 */
 
-void lista_inserir_fim(Lista *l, Tipo elemento, int qtde)
+void lista_inserir_fim(Lista *l, Tipo elemento)
 {
 
-    No *novo = (No *) malloc(sizeof(No));
+    No *novo = (No *)malloc(sizeof(No));
 
-    novo->dado = (char *) calloc((qtde+1), sizeof(char));
+    novo->dado = (char *)malloc((strlen(elemento) + 1));
 
-    strncpy(novo->dado, elemento, qtde);
+    strcpy(novo->dado, elemento);
 
     if (l->qtde == 0)
     {
