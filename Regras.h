@@ -5,6 +5,6 @@
 
 Lista* regra1(ASCIITrie* Dicionario, char *palavra);
 Lista* regra2(ASCIITrie* Dicionario, char *palavra);
-// Lista* regra3(char *palavra, ASCIITrie* Dicionario);
+char* regra3(ASCIITrie* Dicionario, char *palavra);
 // Lista* regra4(char *palavra, ASCIITrie* Dicionario);
 

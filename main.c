@@ -64,7 +64,7 @@ void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arqui
     ASCIITrie *Palavras_verificadas = NULL;
     AT_Inserir(&Palavras_verificadas, "", 0);
 
-    char *palavra = (char *)malloc(sizeof(char));
+    char *palavra = (char *) malloc(sizeof(char));
 
     while (!feof(arquivo_entrada))
     {
@@ -72,27 +72,25 @@ void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arqui
 
         palavra = Formatacao_Palavra(palavra);
 
-        if (!isdigit(palavra[0]))
-        { // verifica se a palavra é um número
+        if (!isdigit(palavra[0])) // verifica se a palavra é um número
+        { 
             if (!AT_Buscar(Dicionario, palavra)) // verifica se a palavra não está no dicionário
             { 
-                Lista *lista1, *lista2, *lista3, *lista4;
+                // Lista *lista1, *lista2, *lista3, *lista4;
 
+                printf("\npalavra não está no dicionário: %s\n", palavra);
+                printf("sugestões:\n");
+
+                Lista *lista1, *lista2, *lista3, *lista4;
                 lista1 = regra1(Dicionario, palavra);
 
-                if (strlen(palavra) > 5)
-                    lista2 = regra2(Dicionario, palavra);
+
+                // if (strlen(palavra) > 5)
+                    // lista2 = regra2(Dicionario, palavra);
 
                 // char *palavra_regra3 = regra3(Dicionario, palavra);
-
-                // lista_inserir_fim(lista3, palavra_regra3, strlen(palavra_regra3));
-
-                //  regra4(palavra, Dicionario);
-
-                //  sugestoes(lista1, lista2, lista3, lista4);
             };
         };
-
     }
 };
 
