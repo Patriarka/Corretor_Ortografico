@@ -5,12 +5,10 @@
 
 Lista *lista_criar()
 {
-
     Lista *nova_lista = (Lista *) malloc(sizeof(Lista));
 
     nova_lista->primeiro = NULL;
     nova_lista->ultimo = NULL;
-
     nova_lista->qtde = 0;
 
     return nova_lista;
@@ -73,32 +71,25 @@ void lista_inserir(Lista *l, Tipo elemento, int posicao)
         }
     }
     l->qtde++;
-}
+};
 
-/* 
-void lista_inserir_fim(Lista* lista, Tipo elemento){
+Lista* lista_uniao(Lista *lista1, Lista *lista2){ // ant primeiro lista e depois do ultimo da lista 2
 
-    if(lista == NULL) return;
+    if(lista1->qtde == 0 && lista2->qtde == 0) return lista1;
+    if(lista1->qtde == 0 && lista2 > 0) return lista1;
+    if(lista2->qtde == 0 && lista1 > 0) return lista1;
 
-    No* no = (No*) malloc(sizeof(No));
+    lista1->ultimo->prox = lista2->primeiro;
+    lista2->primeiro->ant = lista1->ultimo;
+    lista1->ultimo = lista2->ultimo;
 
-    no->dado = elemento;
-    no->ant = lista->ultimo;
-
-    lista->ultimo->prox = no;
-    no->prox = NULL;
-    lista->ultimo = no;
-    lista->qtde++;
-
+    lista1->qtde += lista2->qtde;
 } 
-
- */
 
 void lista_inserir_fim(Lista *l, Tipo elemento, int tam)
 {
 
     No* novo = (No*) malloc(sizeof(No));
-    
     novo->dado = (char*) malloc((tam+1) * sizeof(char));
 
     strncpy(novo->dado, elemento, tam);
@@ -107,6 +98,7 @@ void lista_inserir_fim(Lista *l, Tipo elemento, int tam)
     {
         l->primeiro = novo;
         l->ultimo = novo;
+        novo->ant = NULL;
     }
     else
     {
@@ -114,6 +106,7 @@ void lista_inserir_fim(Lista *l, Tipo elemento, int tam)
         l->ultimo->prox = novo;
         l->ultimo = novo;
     }
+    novo->prox = NULL;
 
     l->qtde++;
 }
@@ -182,6 +175,7 @@ int lista_posicao(Lista *l, Tipo elemento)
 
     return -1;
 }
+
 /* 
 void lista_destruir(Lista* l){
 

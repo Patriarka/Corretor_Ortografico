@@ -30,3 +30,4 @@ int lista_posicao(Lista* l, Tipo elemento);
 int lista_tamanho(Lista* l);
 // void lista_destruir(Lista* l);
 void lista_destruir(Lista* l);
+Lista* lista_uniao(Lista* lista1, Lista* lista2);

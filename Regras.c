@@ -6,34 +6,27 @@
 #include "TRIE_ChavesComPrefixo.h"
 #include "TRIE_ChavesQueCasam.h"
 
-void regra1_R(ASCIITrie *Trie, char *chave, char *nova_chave, int n, int p)
+void regra1_R(ASCIITrie **Trie, char *nova_palavra, char *palavra, int p, Lista* lista)
 {
-    if (Trie == NULL)
+    if (*Trie == NULL)
         return;
 
-    if (strlen(chave) == n && Trie->estado == ATE_OCUPADO)
-    {
-        printf("%s\n", chave);
-    }
+    if (strlen(nova_palavra) == strlen(palavra) && (*Trie)->estado == ATE_OCUPADO)
+        lista_inserir_fim(lista, nova_palavra, strlen(palavra));
 
-    for (int i = 0; i < 26; i++)
-    {
-        if (Trie->filhos[chave[p] - 97])
-        {
-            chave[p] = (char)i + 97;
-            chave[p + 1] = '\0';
+    nova_palavra[p] = (char) palavra[p];
+    nova_palavra[p + 1] = '\0';
 
-            regra1_R(Trie->filhos[chave[p] - 97], chave, nova_chave, n, p + 1);
-        }
-    }
+    regra1_R(&(*Trie)->filhos[palavra[p] - 97], nova_palavra, palavra, p + 1, lista);
 }
 
 Lista *regra1(ASCIITrie *Dicionario, char *palavra)
 {
-    Lista *lista;
+    Lista *lista = lista_criar();
+    Lista *lista1 = lista_criar();
 
-    char *palavra_coringa = (char *)malloc(strlen(palavra) + 1);
-    for (int i = 0; i < strlen(palavra); i++)
+    char *palavra_coringa = (char *) malloc(strlen(palavra) + 1);
+    for (int i = 0; i < strlen(palavra); i++) 
     {
   
         strncpy(palavra_coringa, palavra, i);
@@ -43,20 +36,21 @@ Lista *regra1(ASCIITrie *Dicionario, char *palavra)
 
         No *aux = lista->primeiro;
 
-        int j = 0;
-        for (; j < lista->qtde; j++)
+        for (int j = 0; j < lista->qtde; j++)
         {
             if(aux != NULL){
                 ASCIITrie *Auxiliar = AT_Buscar(Dicionario, aux->dado);
-                regra1_R(Auxiliar, aux->dado, palavra, strlen(palavra), i + 1);
+                regra1_R(&Auxiliar, aux->dado, palavra, i + 1, lista1);
             }
             aux = aux->prox;
         };
     };
 
+
+    // lista_destruir(lista);
     free(palavra_coringa);
 
-    return lista;
+    return lista1;
 };
 
 Lista *regra2(ASCIITrie *Dicionario, char *palavra)
@@ -73,12 +67,17 @@ Lista *regra2(ASCIITrie *Dicionario, char *palavra)
     Lista *lista2 = TRIE_ChavesComPrefixo(Dicionario, palavran_3);
     Lista *lista3 = TRIE_ChavesComPrefixo(Dicionario, palavran_2);
 
-    Lista *lista_final;
+    // if(lista2 == 0) return lista 2;
+    lista2 = lista_uniao(lista2, lista3);
 
-    return lista_final;
+    return lista2;
 };
 
 char *regra3(ASCIITrie *Dicionario, char *palavra)
 {
     return TRIE_ChaveMaiorPrefixoDe(Dicionario, palavra);
 };
+
+/* Lista* regra4(char *palavra, ASCIITrie* Dicionario){
+
+} */

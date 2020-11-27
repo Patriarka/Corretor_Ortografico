@@ -16,7 +16,7 @@ ASCIITrie *Construir_Dicionario(unsigned char *arq_lista_palavras)
 
     FILE *arquivo_dicionario = fopen(arq_lista_palavras, "r");
 
-    char *palavra_auxiliar = (char *)malloc(sizeof(char));
+    char *palavra_auxiliar = (char *) malloc(47* sizeof(char));
 
     int i = 0;
 
@@ -29,24 +29,27 @@ ASCIITrie *Construir_Dicionario(unsigned char *arq_lista_palavras)
         AT_Inserir(&Trie, palavra_auxiliar, i++);
     }
 
+    free(palavra_auxiliar);
+
     return Trie;
 };
 
-void Imprimir_Sugestao(ASCIITrie *Trie_aux, Lista *lista, int i)
+void Imprimir_Sugestao(ASCIITrie *Trie_aux, Lista *lista, int* i)
 {
-    if (lista->qtde < 0)
+
+    if (lista->qtde <= 0)
         return;
 
     No *aux = lista->primeiro;
 
     while (aux != lista->ultimo)
     {
-        AT_Inserir(&Trie_aux, aux->dado, i);
+        AT_Inserir(&Trie_aux, aux->dado, *i);
         aux = aux->prox;
-        i++;
+        (*i)++;
     };
 
-    AT_Imprimir(Trie_aux);
+    // AT_Imprimir(Trie_aux);
 };
 
 void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arquivo_textual)
@@ -76,19 +79,27 @@ void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arqui
         { 
             if (!AT_Buscar(Dicionario, palavra)) // verifica se a palavra não está no dicionário
             { 
-                // Lista *lista1, *lista2, *lista3, *lista4;
+                Lista *lista1, *lista2, *lista3, *lista4;
 
                 printf("\npalavra não está no dicionário: %s\n", palavra);
                 printf("sugestões:\n");
 
-                Lista *lista1, *lista2, *lista3, *lista4;
                 lista1 = regra1(Dicionario, palavra);
 
+                if (strlen(palavra) > 5){
+                    lista2 = regra2(Dicionario, palavra);
+                    printf("%d\n", lista2->qtde);
+                }
 
-                // if (strlen(palavra) > 5)
-                    // lista2 = regra2(Dicionario, palavra);
+                char *palavra_regra3 = regra3(Dicionario, palavra);
+                
+                lista_inserir_fim(lista1, palavra_regra3, strlen(palavra_regra3));
 
-                // char *palavra_regra3 = regra3(Dicionario, palavra);
+                int i = 0;
+
+
+                // Imprimir_Sugestao(Palavras_verificadas, lista1, &i);
+                // Imprimir_Sugestao(Palavras_verificadas, lista2, &i);
             };
         };
     }
@@ -96,10 +107,15 @@ void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arqui
 
 int main(int argc, char **argv)
 {
-    char dicionario[] = "dicionario.txt"; // nome do arquivo em que está contido o nosso dicionário
-    char *arquivo_textual = argv[1];      // recebe o nome do arquivo a ser corrigido
+    // recebe o nome do arquivo do dicionário
+    char dicionario[] = "dicionario.txt"; 
 
-    Corrigir_Ortografia(dicionario, arquivo_textual); // Função que executa a correção do arquivo_textual de acordo com o dicionário
+    // recebe o nome do arquivo a ser corrigido
+    char *arquivo_textual = argv[1];      
+
+    // Executa a correção do arquivo_textual de   
+    // acordo com o conteúdo do dicionário
+    Corrigir_Ortografia(dicionario, arquivo_textual); 
 
     return 0;
 }
