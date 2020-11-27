@@ -37,7 +37,7 @@ Lista *TRIE_ChavesComPrefixo(ASCIITrie *Trie, char *prefixo)
 
     Inserir_Trie_Lista_R(arvore_palavras, prefixo, novo_prefixo, lista_chaves, strlen(prefixo));
  
-    lista_imprimir(lista_chaves);
+    // lista_imprimir(lista_chaves);
 
     free(novo_prefixo);
 

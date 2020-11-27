@@ -46,6 +46,7 @@ Lista *regra1(ASCIITrie *Dicionario, char *palavra)
         };
     };
 
+    // lista_imprimir(lista1);
 
     // lista_destruir(lista);
     free(palavra_coringa);
