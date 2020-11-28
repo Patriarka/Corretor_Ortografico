@@ -76,23 +76,46 @@ void lista_inserir(Lista *l, Tipo elemento, int posicao)
 Lista* lista_uniao(Lista *lista1, Lista *lista2){ // ant primeiro lista e depois do ultimo da lista 2
 
     if(lista1->qtde == 0 && lista2->qtde == 0) return lista1;
-    if(lista1->qtde == 0 && lista2 > 0) return lista1;
-    if(lista2->qtde == 0 && lista1 > 0) return lista1;
+    if(lista1->qtde == 0 && lista2->qtde > 0) return lista1;
+    if(lista2->qtde == 0 && lista1->qtde > 0) return lista1;
 
     lista1->ultimo->prox = lista2->primeiro;
     lista2->primeiro->ant = lista1->ultimo;
     lista1->ultimo = lista2->ultimo;
+    lista1->ultimo->prox = NULL;
 
     lista1->qtde += lista2->qtde;
+
+    return lista1;
 } 
 
-void lista_inserir_fim(Lista *l, Tipo elemento, int tam)
+/* 
+Lista* lista_uniao(Lista *lista1, Lista *lista2){ // ant primeiro lista e depois do ultimo da lista 2
+
+    Lista* nova_lista = lista_criar();
+
+    No* aux = lista1->primeiro;
+    for(int i = 0; i < lista1->qtde; i++){
+        lista_inserir_fim(nova_lista, aux->dado);
+        aux = aux->prox;
+    }
+
+    aux = lista2->primeiro;
+    for(int i = 0; i < lista2->qtde; i++){
+        lista_inserir_fim(nova_lista, aux->dado);
+        aux = aux->prox;
+    }
+
+    return nova_lista;
+} 
+ */
+void lista_inserir_fim(Lista *l, Tipo elemento)
 {
 
+    if(strlen(elemento) < 1) return;
     No* novo = (No*) malloc(sizeof(No));
-    novo->dado = (char*) malloc((tam+1) * sizeof(char));
-
-    strncpy(novo->dado, elemento, tam);
+    
+    novo->dado = elemento;
 
     if (l->qtde == 0)
     {
@@ -174,17 +197,42 @@ int lista_posicao(Lista *l, Tipo elemento)
     }
 
     return -1;
-}
+};
 
+/*
+void lista_destruir(Lista *lista){
+    No *no = lista->primeiro;
+    for(int i=0; i<lista->qtde - 1; i++){
+        lista->primeiro = no->prox;
+        free(no);
+    };
+    free(lista);
+}
+*/
 /* 
 void lista_destruir(Lista* l){
+    if(l == NULL) return;
+    
+}
+ */
 
-    Tipo* removidoFree;
-    while(l->qtde != 0) removidoFree = lista_remover1(l, l->qtde);
-
-    free(l->primeiro);
-    free(l->ultimo);
-    free(l);
+void destruir_no(No* no){
+    if(no == NULL){
+         printf("no null\n");
+        return;
+    }
+    printf("dado: %s\n", no->dado);
+    destruir_no(no->prox);
+    //free(no->dado);
+    free(no);
 }
 
- */
+void lista_destruir(Lista* lista){
+    if(lista == NULL) return;
+    if(lista->qtde <= 0) return;
+    
+    destruir_no(lista->ultimo);
+
+    free(lista);
+    printf("aq\n");
+}

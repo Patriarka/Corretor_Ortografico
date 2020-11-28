@@ -11,7 +11,6 @@
 
 ASCIITrie *Construir_Dicionario(unsigned char *arq_lista_palavras)
 {
-
     ASCIITrie *Trie = NULL;
 
     FILE *arquivo_dicionario = fopen(arq_lista_palavras, "r");
@@ -24,7 +23,7 @@ ASCIITrie *Construir_Dicionario(unsigned char *arq_lista_palavras)
     {
         fscanf(arquivo_dicionario, "%s", palavra_auxiliar);
 
-        palavra_auxiliar = Converter_Minusculo(palavra_auxiliar);
+        Converter_Minusculo(palavra_auxiliar);
 
         AT_Inserir(&Trie, palavra_auxiliar, i++);
     }
@@ -37,14 +36,12 @@ ASCIITrie *Construir_Dicionario(unsigned char *arq_lista_palavras)
 void Imprimir_Sugestao_R(ASCIITrie *Trie, unsigned char *palavra, int pos)
 {
 
-    if (strcmp(palavra, "") != 0 && Trie->estado == ATE_OCUPADO){
-        //printf("%d\n", Trie->val);
-        printf(", "); 
-    }
+    if (strcmp(palavra, "") != 0 && Trie->estado == ATE_OCUPADO)
+        printf(", ");
 
     if (Trie->estado == ATE_OCUPADO)
     {
-        if(strcmp(palavra, "") != 0)
+        if (strcmp(palavra, "") != 0)
             printf("%s", palavra);
     }
 
@@ -61,22 +58,27 @@ void Imprimir_Sugestao_R(ASCIITrie *Trie, unsigned char *palavra, int pos)
             Imprimir_Sugestao_R(Trie->filhos[i], palavra, pos + 1);
         };
     }
-}
+};
 
-void Inserir_Lista_Trie(ASCIITrie *Trie_aux, Lista *lista)
+void Inserir_Lista_Trie(ASCIITrie **Trie_aux, Lista *lista)
 {
-
+    if (lista == NULL) 
+        return;
+        
     if (lista->qtde <= 0)
         return;
 
     No *aux = lista->primeiro;
-    int i = 0;
-    while (aux != lista->ultimo)
+    int i = 1;
+    int k=0;
+    while (k < lista->qtde)
     {
-        AT_Inserir(&Trie_aux, aux->dado, i);
+        AT_Inserir(Trie_aux, aux->dado, 1);
         aux = aux->prox;
         i++;
+        k++;
     };
+
 };
 
 void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arquivo_textual)
@@ -95,49 +97,49 @@ void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arqui
     while (!feof(arquivo_entrada))
     {
         ASCIITrie *Palavras_verificadas = NULL;
-        AT_Inserir(&Palavras_verificadas, "", 0);
+        // AT_Inserir(&Palavras_verificadas, "", 0);
         fscanf(arquivo_entrada, "%s", palavra);
 
-        palavra = Formatacao_Palavra(palavra);
+        Formatacao_Palavra(palavra);
 
-        if (strcmp(palavra, "respiraes") == 0)
+        if (!isdigit(palavra[0])) // verifica se a palavra é um número
         {
-
-            if (!isdigit(palavra[0])) // verifica se a palavra é um número
+            if (!AT_Buscar(Dicionario, palavra)) // verifica se a palavra não está no dicionário
             {
-                if (!AT_Buscar(Dicionario, palavra)) // verifica se a palavra não está no dicionário
-                {
-                    Lista *lista1, *lista2, *lista4, *lista_final;
+                Lista *lista1 = NULL, *lista2 = NULL, *lista_final = NULL;
 
-                    printf("\npalavra não está no dicionário: %s\n", palavra);
-                    printf("sugestões:\n");
+                printf("\npalavra não está no dicionário: %s\n", palavra);
+                printf("sugestões:\n");
 
-                    lista1 = regra1(Dicionario, palavra);
+                lista1 = regra1(Dicionario, palavra);
 
-                    if (strlen(palavra) > 5)
-                        lista2 = regra2(Dicionario, palavra);
+                if (strlen(palavra) > 5){
+                    lista2 = regra2(Dicionario, palavra); 
+                }
 
-                    char *palavra_regra3 = regra3(Dicionario, palavra);
+                char* palavra_regra3 = regra3(Dicionario, palavra);
 
-                    lista_inserir_fim(lista1, palavra_regra3, strlen(palavra_regra3));
+                printf("%s\n", palavra_regra3);
 
-                    if (lista2 != NULL)
-                        lista1 = lista_uniao(lista1, lista2);
+                // printf("qtde antes da funcao: %d\n", lista2->qtde); 
+                
+                lista_inserir_fim(lista1, palavra_regra3);
 
-                    // lista1 = lista_uniao(lista1, lista4);
+                if (lista2 != NULL)
+                    lista_final = lista_uniao(lista1, lista2);
+                else lista_final = lista1;
 
-                    if (lista1->qtde > 0)
-                    {
-                        Inserir_Lista_Trie(Palavras_verificadas, lista1);
-                        char *palavra_final = (char *)malloc(47 * sizeof(char));
-                        printf("\n[");
-                        Imprimir_Sugestao_R(Palavras_verificadas, palavra_final, 0);
-                        printf("]\n");
-                    }
-                };
+                Inserir_Lista_Trie(&Palavras_verificadas, lista_final);  
+
+                Lista* lista_total = TRIE_ChavesComPrefixo(Palavras_verificadas, "");
+
+                lista_imprimir(lista_total);
+                
             };
-        }
-    }
+        };
+    };
+
+    free(palavra);
 };
 
 int main(int argc, char **argv)
@@ -151,6 +153,10 @@ int main(int argc, char **argv)
     // Executa a correção do arquivo_textual de
     // acordo com o conteúdo do dicionário
     Corrigir_Ortografia(dicionario, arquivo_textual);
-
+    
     return 0;
 }
+
+// Destruir as Tries
+// Confirmar desalocação
+// Regra 4

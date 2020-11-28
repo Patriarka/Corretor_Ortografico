@@ -12,10 +12,10 @@ int flag, int flag_regra_1, int n_extras, Lista *lista)
 
     if (Trie->estado != ATE_LIVRE || flag_regra_1 == 1){
         if(flag == 1 && strlen(padrao) == tam_padrao_ini)
-            lista_inserir_fim(lista, padrao, strlen(padrao));
+            lista_inserir_fim(lista, padrao);
             
-        else if(flag == 0 && strlen(padrao) >= tam_padrao_ini )
-            lista_inserir_fim(lista, padrao, strlen(padrao)); 
+        else if(flag == 0 && strlen(padrao) >= tam_padrao_ini)
+            lista_inserir_fim(lista, padrao); 
     }
 
     if (Trie == NULL || n_extras == 0)
@@ -24,8 +24,8 @@ int flag, int flag_regra_1, int n_extras, Lista *lista)
     for (int i = 0; i < 26; i++)
     {
         if (Trie->filhos[i] != NULL)
-        {
-            if (n_extras > 0)
+        {                                   
+            if (n_extras > 0) 
             {
                 char *novo_padrao = malloc((strlen(padrao) + 2) * sizeof(char));
 
@@ -36,8 +36,6 @@ int flag, int flag_regra_1, int n_extras, Lista *lista)
 
                 TRIE_ChavesQueCasam_R(Trie->filhos[i], novo_padrao, tam_padrao_ini, 
                 flag, flag_regra_1, n_extras - 1, lista);
-
-                free(novo_padrao);
             }
         }
     }
@@ -49,7 +47,7 @@ Lista *TRIE_ChavesQueCasam(ASCIITrie *Trie, char *padrao, int flag, int flag_reg
     Lista *lista_chaves = lista_criar();
     
     ASCIITrie *arvore_palavras = AT_Buscar(Trie, padrao);
-    
+
     if(arvore_palavras == NULL)
         return lista_chaves;
     
@@ -65,7 +63,7 @@ static void TRIE_ChaveMaiorPrefixoDe_Aux(ASCIITrie *Trie, char *nova_str, char *
         return;
 
     if (Trie->estado == ATE_OCUPADO)
-        lista_inserir_fim(lista, nova_str, pos);
+        lista_inserir_fim(lista, nova_str);
 
     nova_str[pos] = str[pos];
     nova_str[pos + 1] = '\0';
