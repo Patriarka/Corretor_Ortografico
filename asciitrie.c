@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "asciitrie.h"
+#include "TAD_ListaEncadeada.h"
 
 ASCIITrie* AT_Buscar_R(ASCIITrie* T, unsigned char *chave, int n, int p){
 
@@ -15,8 +16,6 @@ ASCIITrie* AT_Buscar_R(ASCIITrie* T, unsigned char *chave, int n, int p){
 };
 
 ASCIITrie* AT_Buscar(ASCIITrie* T, unsigned char *chave){
-    // printf("%s", chave);
-    // printf("%p", &chave);
     return AT_Buscar_R(T, chave, strlen(chave), 0);
 };
 
@@ -96,6 +95,27 @@ static void AT_Imprimir_R(ASCIITrie *T, unsigned char c, int nivel){
             AT_Imprimir_R(T->filhos[i], i+97, nivel+1);
 
 }
+
+
+void Inserir_Lista_Trie(ASCIITrie **Trie_aux, Lista *lista)
+{
+    if (lista == NULL)
+        return;
+
+    if (lista->qtde <= 0)
+        return;
+
+    No *aux = lista->primeiro;
+    int i = 1;
+    int k = 0;
+    while (k < lista->qtde)
+    {
+        AT_Inserir(Trie_aux, aux->dado, 1);
+        aux = aux->prox;
+        i++;
+        k++;
+    };
+};
 
 void AT_Imprimir(ASCIITrie* T){
     AT_Imprimir_R(T, 0, 0);

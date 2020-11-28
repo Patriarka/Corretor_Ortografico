@@ -5,7 +5,7 @@
 
 Lista *lista_criar()
 {
-    Lista *nova_lista = (Lista *) malloc(sizeof(Lista));
+    Lista *nova_lista = (Lista *)malloc(sizeof(Lista));
 
     nova_lista->primeiro = NULL;
     nova_lista->ultimo = NULL;
@@ -73,11 +73,15 @@ void lista_inserir(Lista *l, Tipo elemento, int posicao)
     l->qtde++;
 };
 
-Lista* lista_uniao(Lista *lista1, Lista *lista2){ // ant primeiro lista e depois do ultimo da lista 2
+Lista *lista_uniao(Lista *lista1, Lista *lista2)
+{ // ant primeiro lista e depois do ultimo da lista 2
 
-    if(lista1->qtde == 0 && lista2->qtde == 0) return lista1;
-    if(lista1->qtde == 0 && lista2->qtde > 0) return lista1;
-    if(lista2->qtde == 0 && lista1->qtde > 0) return lista1;
+    if (lista1->qtde == 0 && lista2->qtde == 0)
+        return lista1;
+    if (lista1->qtde == 0 && lista2->qtde > 0)
+        return lista1;
+    if (lista2->qtde == 0 && lista1->qtde > 0)
+        return lista1;
 
     lista1->ultimo->prox = lista2->primeiro;
     lista2->primeiro->ant = lista1->ultimo;
@@ -87,7 +91,7 @@ Lista* lista_uniao(Lista *lista1, Lista *lista2){ // ant primeiro lista e depois
     lista1->qtde += lista2->qtde;
 
     return lista1;
-} 
+}
 
 /* 
 Lista* lista_uniao(Lista *lista1, Lista *lista2){ // ant primeiro lista e depois do ultimo da lista 2
@@ -112,9 +116,10 @@ Lista* lista_uniao(Lista *lista1, Lista *lista2){ // ant primeiro lista e depois
 void lista_inserir_fim(Lista *l, Tipo elemento)
 {
 
-    if(strlen(elemento) < 1) return;
-    No* novo = (No*) malloc(sizeof(No));
-    
+    if (strlen(elemento) < 1)
+        return;
+    No *novo = (No *)malloc(sizeof(No));
+
     novo->dado = elemento;
 
     if (l->qtde == 0)
@@ -199,26 +204,98 @@ int lista_posicao(Lista *l, Tipo elemento)
     return -1;
 };
 
-/*
-void lista_destruir(Lista *lista){
-    No *no = lista->primeiro;
-    for(int i=0; i<lista->qtde - 1; i++){
-        lista->primeiro = no->prox;
-        free(no);
-    };
-    free(lista);
-}
-*/
-/* 
-void lista_destruir(Lista* l){
-    if(l == NULL) return;
-    
+/* Tipo lista_remover(Lista *l, int posicao)
+{
+
+    if (posicao < 0 || posicao > l->qtde - 1)
+        return NULL;
+
+    No *onde = l->primeiro;
+
+    for (int i = 0; i < posicao; i++)
+    {
+        onde = onde->prox;
+    }
+
+    if (posicao == 0)
+    {
+        l->primeiro = onde->prox;
+    }
+    else if (posicao == l->qtde - 1)
+    {
+        onde->ant->prox = NULL;
+    }
+    else
+    {
+        onde->ant->prox = onde->prox;
+        onde->prox->ant = onde->ant;
+    }
+
+    Tipo *dado = (Tipo *)malloc(sizeof(Tipo));
+
+    *dado = onde->dado;
+
+    free(onde);
+    l->qtde--;
+
+    return dado;
 }
  */
+/* 
+No* buscarPosicaoFim(Lista* l, int pos){
+    No* aux = l->primeiro;
+    for(int i = 0; i < pos; i++) {
+        aux = aux->prox;
+    }
+    return aux;
+}
+ */
+/*FUNCAO QUE RETORNA ENDEREÇO ONDE SERA INSERIDO VALOR
+/*TAL FUNÇÃO COMEÇA SUA PROCURA PELO FIM DA LISTA
+*@param: l = lista onde sera procurada posicao
+*@return endereço dessa posição
+*/
+No* buscarPosicaoFim(Lista* l, int pos){
+    No* aux = l->ultimo;
+    for(int i = l->qtde-1; i > pos; i--) {
+        aux = aux->ant;
+    }
+    return aux;
+}
 
-void destruir_no(No* no){
-    if(no == NULL){
-         printf("no null\n");
+
+No* buscarPosicao(Lista* l, int posicao){
+    No* pos;
+
+    int posicaoMeio = l->qtde / 2;
+    if( posicaoMeio == posicao || posicaoMeio >= posicao ) pos = buscarPosicaoFim(l, posicao);
+    if( posicaoMeio <= posicao ) pos = buscarPosicaoFim(l, posicao);
+
+    return pos;
+}
+
+Tipo lista_remover(Lista* l, int posicao){
+    if(l == NULL) return NULL;
+    if(l->qtde == 0) return NULL;
+    if(posicao < 0 || posicao >= l->qtde) return NULL;
+
+    No* pos = buscarPosicao(l, posicao);
+    
+    if(posicao != 0 && posicao < l->qtde-1) pos->ant->prox = pos->prox;
+    if(posicao != l->qtde-1) pos->prox->ant = pos->ant;
+    if(posicao == l->qtde-1) pos->ant->prox = NULL;
+    if(posicao == 0) l->primeiro = pos->prox;
+
+    l->qtde--;
+    return pos->dado;
+}
+
+
+void destruir_no(No *no)
+{
+    if (no == NULL)
+    {
+        printf("no null\n");
         return;
     }
     printf("dado: %s\n", no->dado);
@@ -227,10 +304,13 @@ void destruir_no(No* no){
     free(no);
 }
 
-void lista_destruir(Lista* lista){
-    if(lista == NULL) return;
-    if(lista->qtde <= 0) return;
-    
+void lista_destruir(Lista *lista)
+{
+    if (lista == NULL)
+        return;
+    if (lista->qtde <= 0)
+        return;
+
     destruir_no(lista->ultimo);
 
     free(lista);

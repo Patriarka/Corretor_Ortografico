@@ -62,26 +62,6 @@ void Imprimir_Sugestao_R(ASCIITrie *Trie, unsigned char *palavra, int pos)
     }
 };
 
-void Inserir_Lista_Trie(ASCIITrie **Trie_aux, Lista *lista)
-{
-    if (lista == NULL)
-        return;
-
-    if (lista->qtde <= 0)
-        return;
-
-    No *aux = lista->primeiro;
-    int i = 1;
-    int k = 0;
-    while (k < lista->qtde)
-    {
-        AT_Inserir(Trie_aux, aux->dado, 1);
-        aux = aux->prox;
-        i++;
-        k++;
-    };
-};
-
 void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arquivo_textual)
 {
 
@@ -112,7 +92,7 @@ void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arqui
             if (!AT_Buscar(Dicionario, palavra)) // verifica se a palavra não está no dicionário
             {
                 palavras_erradas++;
-                Lista *lista1 = NULL, *lista2 = NULL, *lista_final = NULL;
+                Lista *lista1 = NULL, *lista2 = NULL, *lista3 = NULL, *lista_final = NULL;
 
                 printf("\npalavra não está no dicionário: %s\n", palavra);
                 printf("sugestões:\n");
@@ -131,9 +111,11 @@ void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arqui
                 lista_inserir_fim(lista1, palavra_regra3);
 
                 if (lista2 != NULL)
-                    lista_final = lista_uniao(lista1, lista2);
+                    lista_final = lista_uniao(lista1, lista2); // União da lista da ChavesComPrefixo e ChavesQueCasam
                 else
                     lista_final = lista1;
+
+                lista3 = regra4(lista_final, palavra);
 
                 Inserir_Lista_Trie(&Palavras_verificadas, lista_final);
 

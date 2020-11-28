@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "asciitrie.h"
 #include "TAD_ListaEncadeada.h"
 #include "TRIE_ChavesComPrefixo.h"
@@ -87,12 +88,40 @@ Lista *regra2(ASCIITrie *Dicionario, char *palavra)
     }
 };
 
-
 char *regra3(ASCIITrie *Dicionario, char *palavra)
 {
     return TRIE_ChaveMaiorPrefixoDe(Dicionario, palavra);
 };
 
-/* Lista* regra4(char *palavra, ASCIITrie* Dicionario){
+Lista* regra4(Lista* lista, unsigned char* palavra){
+    
+    if(lista->qtde < 0 || lista == NULL) return lista;
+    
+    if(lista->qtde < 5) return lista;
 
-} */
+    int i=0;
+    int quantidade_letras_lista = 0;
+    float media_letras_lista = 0;
+    
+    No* aux = lista->primeiro;
+
+    for(; i < lista->qtde; i++) {
+        quantidade_letras_lista += strlen(aux->dado);
+        aux = aux->prox;
+    };
+
+    media_letras_lista = (float) quantidade_letras_lista / lista->qtde;
+
+    printf("media letras da lista %f\n", media_letras_lista);
+
+    aux = lista->primeiro;
+
+    for(i=1; i<lista->qtde; i++){
+        aux = aux->prox;
+        if(strlen(aux->dado) > ceil(media_letras_lista) + 2 || (strlen(aux->dado) < ((50/100)* strlen(palavra))))
+            lista_remover(lista, i);
+    } 
+
+    return lista;
+}
+

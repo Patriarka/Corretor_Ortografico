@@ -1,5 +1,6 @@
 #pragma once
-// #define tamanho_alfabeto 26
+
+#include "TAD_ListaEncadeada.h"
 
 typedef enum ASCIITrie_ESTADO{
     ATE_LIVRE,
@@ -22,3 +23,4 @@ void AT_Inserir(ASCIITrie **T, unsigned char *chave, int val);
 void AT_Remover(ASCIITrie **T, unsigned char *chave);
 void AT_Imprimir(ASCIITrie* T);
 void AT_Destruir(ASCIITrie* Trie);
+void Inserir_Lista_Trie(ASCIITrie **Trie_aux, Lista *lista);

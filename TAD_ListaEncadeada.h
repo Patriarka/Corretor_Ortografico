@@ -21,7 +21,7 @@ void lista_inserir(Lista* l, Tipo elemento, int posicao);
 void lista_imprimir(Lista* l);
 void lista_inserir_fim(Lista *l, Tipo elemento);
 //void lista_inserir_fim(Lista *l, Tipo elemento, int tam);
-Tipo* lista_remover1(Lista* l, int posicao);
+Tipo lista_remover(Lista* l, int posicao);
 Boolean lista_buscar(Lista* l, int posicao, int* endereco);
 // Boolean lista_remover2(Lista* l, int posicao, int* endereco);
 // Boolean lista_remover_elemento(Lista* l, Tipo elemento);
