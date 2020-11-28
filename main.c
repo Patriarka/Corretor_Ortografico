@@ -16,16 +16,14 @@ ASCIITrie *Construir_Dicionario(unsigned char *arq_lista_palavras)
 
     FILE *arquivo_dicionario = fopen(arq_lista_palavras, "r");
 
-    char *palavra_auxiliar = (char *)malloc(47 * sizeof(char));
+    char *palavra_auxiliar = (char *) malloc(47 * sizeof(char));
 
     int i = 0;
 
     while (!feof(arquivo_dicionario))
     {
         fscanf(arquivo_dicionario, "%s", palavra_auxiliar);
-
         Converter_Minusculo(palavra_auxiliar);
-
         AT_Inserir(&Trie, palavra_auxiliar, i++);
     }
 
@@ -35,62 +33,30 @@ ASCIITrie *Construir_Dicionario(unsigned char *arq_lista_palavras)
     return Trie;
 };
 
-void Imprimir_Sugestao_R(ASCIITrie *Trie, unsigned char *palavra, int pos)
-{
-
-    if (strcmp(palavra, "") != 0 && Trie->estado == ATE_OCUPADO)
-        printf(", ");
-
-    if (Trie->estado == ATE_OCUPADO)
-    {
-        if (strcmp(palavra, "") != 0)
-            printf("%s", palavra);
-    }
-
-    if (Trie == NULL)
-        return;
-
-    for (int i = 0; i < 26; i++)
-    {
-        if (Trie->filhos[i] != NULL)
-        {
-            palavra[pos] = (char)i + 97;
-            palavra[pos + 1] = '\0';
-
-            Imprimir_Sugestao_R(Trie->filhos[i], palavra, pos + 1);
-        };
-    }
-};
-
 void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arquivo_textual)
 {
-
-    FILE *arquivo_entrada = fopen(arquivo_textual, "r");
-    if (arquivo_entrada == NULL)
-    {
-        printf("Erro ao abrir o arquivo!\n");
-        return;
-    }
-
     ASCIITrie *Dicionario = Construir_Dicionario(arquivo_dicionario);
-    char *palavra = (char *)malloc(sizeof(char));
+    char *palavra = (char *) malloc(sizeof(char));
     int palavras = 0;
     int palavras_erradas = 0;
     int palavras_sugeridas = 0;
     float numero_medio_sugestoes_palavras_incorretas = 0;
-    
+
+    FILE *arquivo_entrada = fopen(arquivo_textual, "r");
+    if (arquivo_entrada == NULL){
+        printf("Erro ao abrir o arquivo!\n");
+        return;
+    }
+
     while (!feof(arquivo_entrada))
     {
         ASCIITrie *Palavras_verificadas = NULL;
+
         fscanf(arquivo_entrada, "%s", palavra);
+        Formatacao_Palavra(palavra); 
 
-        palavras++;
-        Formatacao_Palavra(palavra);
-
-        if (!isdigit(palavra[0])) // verifica se a palavra é um número
-        {
-            if (!AT_Buscar(Dicionario, palavra)) // verifica se a palavra não está no dicionário
-            {
+        if (!isdigit(palavra[0])){  // verifica se a palavra é um número      
+            if (!AT_Buscar(Dicionario, palavra)){ // verifica se a palavra não está no dicionário
                 palavras_erradas++;
                 Lista *lista1 = NULL, *lista2 = NULL, *lista3 = NULL, *lista_final = NULL;
 
@@ -110,12 +76,13 @@ void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arqui
 
                 lista_inserir_fim(lista1, palavra_regra3);
 
-                if (lista2 != NULL)
-                    lista_final = lista_uniao(lista1, lista2); // União da lista da ChavesComPrefixo e ChavesQueCasam
-                else
-                    lista_final = lista1;
+                if (lista2 != NULL){
+                    lista_final = lista_uniao(lista1, lista2); // União da lista de sugestões de ChavesComPrefixo e ChavesQueCasam
+                } else {
+                    lista_final = lista1; 
+                }
 
-                lista3 = regra4(lista_final, palavra);
+                lista3 = regra4(lista_final, palavra); 
 
                 Inserir_Lista_Trie(&Palavras_verificadas, lista_final);
 
@@ -126,10 +93,15 @@ void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arqui
                 lista_imprimir(lista_total);
             };
         };
+
+        palavras++;
         numero_medio_sugestoes_palavras_incorretas = (float) palavras_sugeridas / palavras_erradas;
+        AT_Destruir(Palavras_verificadas);
     };
 
-    printf("%d %d %f\n", palavras, palavras_erradas, numero_medio_sugestoes_palavras_incorretas);
+    printf("Total de palavras: %d\n", palavras);
+    printf("Total de palavras erradas: %d\n", palavras_erradas);
+    printf("Num médio de sugestões por palavra incorreta: %f\n", numero_medio_sugestoes_palavras_incorretas);
 
     AT_Destruir(Dicionario);
     free(palavra);
