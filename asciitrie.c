@@ -101,3 +101,18 @@ void AT_Imprimir(ASCIITrie* T){
     AT_Imprimir_R(T, 0, 0);
     printf("/*========================*/\n");
 };
+
+void AT_Destruir(ASCIITrie* Trie){
+
+    if (Trie == NULL)
+        return;
+
+    for (int i = 0; i < 26; i++)
+    {
+        if (Trie->filhos[i] != NULL)
+            AT_Destruir(Trie->filhos[i]);
+    }
+
+    free(Trie);
+}
+

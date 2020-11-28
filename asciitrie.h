@@ -21,3 +21,4 @@ ASCIITrie* AT_Buscar(ASCIITrie* T, unsigned char *chave);
 void AT_Inserir(ASCIITrie **T, unsigned char *chave, int val);
 void AT_Remover(ASCIITrie **T, unsigned char *chave);
 void AT_Imprimir(ASCIITrie* T);
+void AT_Destruir(ASCIITrie* Trie);

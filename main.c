@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 #include "Regras.h"
 #include "asciitrie.h"
 #include "TAD_formata_palavra.h"
@@ -29,6 +30,7 @@ ASCIITrie *Construir_Dicionario(unsigned char *arq_lista_palavras)
     }
 
     free(palavra_auxiliar);
+    fclose(arquivo_dicionario);
 
     return Trie;
 };
@@ -62,15 +64,15 @@ void Imprimir_Sugestao_R(ASCIITrie *Trie, unsigned char *palavra, int pos)
 
 void Inserir_Lista_Trie(ASCIITrie **Trie_aux, Lista *lista)
 {
-    if (lista == NULL) 
+    if (lista == NULL)
         return;
-        
+
     if (lista->qtde <= 0)
         return;
 
     No *aux = lista->primeiro;
     int i = 1;
-    int k=0;
+    int k = 0;
     while (k < lista->qtde)
     {
         AT_Inserir(Trie_aux, aux->dado, 1);
@@ -78,7 +80,6 @@ void Inserir_Lista_Trie(ASCIITrie **Trie_aux, Lista *lista)
         i++;
         k++;
     };
-
 };
 
 void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arquivo_textual)
@@ -93,19 +94,24 @@ void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arqui
 
     ASCIITrie *Dicionario = Construir_Dicionario(arquivo_dicionario);
     char *palavra = (char *)malloc(sizeof(char));
-
+    int palavras = 0;
+    int palavras_erradas = 0;
+    int palavras_sugeridas = 0;
+    float numero_medio_sugestoes_palavras_incorretas = 0;
+    
     while (!feof(arquivo_entrada))
     {
         ASCIITrie *Palavras_verificadas = NULL;
-        // AT_Inserir(&Palavras_verificadas, "", 0);
         fscanf(arquivo_entrada, "%s", palavra);
 
+        palavras++;
         Formatacao_Palavra(palavra);
 
         if (!isdigit(palavra[0])) // verifica se a palavra é um número
         {
             if (!AT_Buscar(Dicionario, palavra)) // verifica se a palavra não está no dicionário
             {
+                palavras_erradas++;
                 Lista *lista1 = NULL, *lista2 = NULL, *lista_final = NULL;
 
                 printf("\npalavra não está no dicionário: %s\n", palavra);
@@ -113,37 +119,47 @@ void Corrigir_Ortografia(unsigned char *arquivo_dicionario, unsigned char *arqui
 
                 lista1 = regra1(Dicionario, palavra);
 
-                if (strlen(palavra) > 5){
-                    lista2 = regra2(Dicionario, palavra); 
+                if (strlen(palavra) > 5)
+                {
+                    lista2 = regra2(Dicionario, palavra);
                 }
 
-                char* palavra_regra3 = regra3(Dicionario, palavra);
+                char *palavra_regra3 = regra3(Dicionario, palavra);
 
                 printf("%s\n", palavra_regra3);
 
-                // printf("qtde antes da funcao: %d\n", lista2->qtde); 
-                
                 lista_inserir_fim(lista1, palavra_regra3);
 
                 if (lista2 != NULL)
                     lista_final = lista_uniao(lista1, lista2);
-                else lista_final = lista1;
+                else
+                    lista_final = lista1;
 
-                Inserir_Lista_Trie(&Palavras_verificadas, lista_final);  
+                Inserir_Lista_Trie(&Palavras_verificadas, lista_final);
 
-                Lista* lista_total = TRIE_ChavesComPrefixo(Palavras_verificadas, "");
+                Lista *lista_total = TRIE_ChavesComPrefixo(Palavras_verificadas, "");
+
+                palavras_sugeridas += lista_total->qtde;
 
                 lista_imprimir(lista_total);
-                
             };
         };
+        numero_medio_sugestoes_palavras_incorretas = (float) palavras_sugeridas / palavras_erradas;
     };
 
+    printf("%d %d %f\n", palavras, palavras_erradas, numero_medio_sugestoes_palavras_incorretas);
+
+    AT_Destruir(Dicionario);
     free(palavra);
+    fclose(arquivo_entrada);
 };
 
 int main(int argc, char **argv)
 {
+    clock_t t;
+
+    t = clock();
+
     // recebe o nome do arquivo do dicionário
     char dicionario[] = "dicionario.txt";
 
@@ -153,10 +169,10 @@ int main(int argc, char **argv)
     // Executa a correção do arquivo_textual de
     // acordo com o conteúdo do dicionário
     Corrigir_Ortografia(dicionario, arquivo_textual);
+
+    t = clock() - t;
     
+    printf("%f seconds\n",((float)t)/CLOCKS_PER_SEC);
+
     return 0;
 }
-
-// Destruir as Tries
-// Confirmar desalocação
-// Regra 4
